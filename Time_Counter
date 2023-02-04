@@ -1,0 +1,102 @@
+-- Gui to Lua
+-- Version: 3.2
+
+-- Instances:
+
+local Time_Counter = Instance.new("ScreenGui")
+local mframe = Instance.new("Frame")
+local time = Instance.new("TextLabel")
+local TextLabel = Instance.new("TextLabel")
+
+--Properties:
+
+Time_Counter.Name = "Time_Counter"
+Time_Counter.Parent = game.Workspace
+Time_Counter.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+mframe.Name = "mframe"
+mframe.Parent = Time_Counter
+mframe.AnchorPoint = Vector2.new(0.5, 0.5)
+mframe.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+mframe.BackgroundTransparency = 1.000
+mframe.BorderSizePixel = 0
+mframe.Position = UDim2.new(0.5, 0, 0.5, -18)
+mframe.Size = UDim2.new(1.77699995, 64, 1, 36)
+mframe.SizeConstraint = Enum.SizeConstraint.RelativeYY
+
+time.Name = "time"
+time.Parent = mframe
+time.AnchorPoint = Vector2.new(0, 1)
+time.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+time.BackgroundTransparency = 1.000
+time.BorderSizePixel = 0
+time.Position = UDim2.new(0.424345225, 0, 0.167350784, 0)
+time.Size = UDim2.new(0.353040576, 0, 0.0325537138, 0)
+time.SizeConstraint = Enum.SizeConstraint.RelativeYY
+time.Font = Enum.Font.Unknown
+time.Text = "00:00:00:0000"
+time.TextColor3 = Color3.fromRGB(255, 255, 255)
+time.TextScaled = true
+time.TextSize = 14.000
+time.TextWrapped = true
+time.TextXAlignment = Enum.TextXAlignment.Left
+
+TextLabel.Parent = mframe
+TextLabel.BackgroundColor3 = Color3.fromRGB(170, 255, 255)
+TextLabel.BackgroundTransparency = 1.000
+TextLabel.Position = UDim2.new(0.402241826, 0, 0.0739856809, 0)
+TextLabel.Size = UDim2.new(0, 200, 0, 50)
+TextLabel.Font = Enum.Font.Arial
+TextLabel.Text = "Time in game"
+TextLabel.TextColor3 = Color3.fromRGB(170, 255, 255)
+TextLabel.TextScaled = true
+TextLabel.TextSize = 14.000
+TextLabel.TextWrapped = true
+
+-- Scripts:
+
+local function AUVI_fake_script() -- Time_Counter.LocalScript 
+	local script = Instance.new('LocalScript', Time_Counter)
+
+	local gametime = workspace.DistributedGameTime
+	
+	game:GetService("RunService").RenderStepped:Connect(function()
+		local difference = workspace.DistributedGameTime-gametime
+		
+		local miliseconds = math.floor(difference/0.001)
+		local seconds = math.floor(difference/1)
+		local minutes = math.floor(difference/60)
+		local hours = math.floor(difference/3600)
+		
+		local remaininghours = hours
+		local remainingminutes = minutes-(60*hours)
+		local remainingseconds = seconds-(60*minutes)
+		local remainingmiliseconds = miliseconds-(1000*seconds)
+		
+		local rhours2 = remaininghours
+		if rhours2 < 10 then
+			rhours2 = "0"..rhours2
+		end
+		local rminutes2 = remainingminutes
+		if rminutes2 < 10 then
+			rminutes2 = "0"..rminutes2
+		end
+		local rseconds2 = remainingseconds
+		if rseconds2 < 10 then
+			rseconds2 = "0"..rseconds2
+		end
+		local rmiliseconds2 = remainingmiliseconds
+		if remainingmiliseconds < 1000 then
+			rmiliseconds2 = "0"..remainingmiliseconds
+		end
+		if remainingmiliseconds < 100 then
+			rmiliseconds2 = "00"..remainingmiliseconds
+		end
+		if remainingmiliseconds < 10 then
+			rmiliseconds2 = "000"..remainingmiliseconds
+		end
+		
+		script.Parent.mframe.time.Text = rhours2..":"..rminutes2..":"..rseconds2..":"..rmiliseconds2
+	end)
+end
+coroutine.wrap(AUVI_fake_script)()
